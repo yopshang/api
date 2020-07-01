@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>產品列表</h2>
+        <!-- <button class="m-15" id = "addProduct"> 新增商品 </button> -->
+        <div class="d-flex">
+        </div>
+        <!-- <div>
+            <div class="card d-flex">
+                <div class="border w50 p-15">
+                    <img id="img" src="" alt="產品照片" class="card-img-top">
+                </div>
+                <div class="card-body w50 d-flex flex-d-c">
+                    <div class="d-flex">
+                        <input id= "title" class="card-title title p-15 w50" placeholder="請輸入產品名稱"></input>
+                        <input id= "category" class="card-title title p-15 w50" placeholder="請輸入產品分類"></input>
+                    </div>
+                    <div class="d-flex">
+                        <input id = "content" class="card-text detail p-15 h150 w50" placeholder="請輸入產品描述"></input>
+                        <input id = "description" class="card-text detail p-15 h150 w50" placeholder="請輸入產品說明"></input>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div id="app" class="card-columns">
+        </div>
+    </div>
+</body>
+</html>
+<style lang="scss">
+    .titleDiv{
+        align-items: center;
+        justify-content: space-between;
+    }
+    .imgSort{
+        position: relative;
+    }
+    .sort{
+        position: absolute;
+        color: #fff;
+        background-color: #000;
+        font-weight: bold;
+        font-size: 20px;
+        left: 5px;
+    }
+    .d-flex{
+        display: flex;
+    }
+    .flex-d-c{
+        flex-direction: column;
+    }
+    .p-15{
+        padding: 15px;
+    }
+    .m0{
+        margin: 0;
+    }
+    .m-15{
+        margin: 15px;
+    }
+    .h150{
+        height: 150px;
+    }
+    .h350{
+        height: 350px;
+    }
+    .h500{
+        height: 500px;
+    }
+    .w100{
+        width: 100px;
+    }
+    .w50{
+        width: 50%;
+    }
+    .border{
+        border: solid;
+    }
+    .title{
+        font-size: 36px;
+        font-weight: bold;
+    }
+    .detail{
+        color: gray;
+    }
+
+</style>
+<script>
+    // LV1：建立自己的資料內容，並且前端可取得資料即算完成（僅需要使用 console.log 呈現）
+    // LV2：使用課程版型，並且完整呈現列表
+    // document.getElementById('getProduct').addEventListener('click',getData);
+
+    var data = {
+        uuid: '8896c30f-e93d-421b-90d9-4e955a07490f',
+        products: [],
+        // newdata: {
+        //     title :'',
+        //     category: '',
+        //     content: '',
+        //     description: '',
+        //     imageUrl: '',
+        // }
+    }
+    // var addProduct = getElementById('addProduct');
+    // addProduct.addEventListener('click',addData);
+
+    // var title = document.getElementById('title').value;
+    // var  category = document.getElementById('category').value;
+    // var content = document.getElementById('content').value;
+    // var description = document.getElementById('description').value;
+    // var img = document.getElementById('img');
+
+
+    var getData = function() {
+        var vm = this;
+        var url = `https://course-ec-api.hexschool.io/api/${data.uuid}/ec/products`;
+
+        axios.get(url).then( (res) =>{
+            vm.data.products = res.data.data;
+            console.log(res);
+            vm.render();
+        })
+        console.log('取得成功');
+    }
+    // var addData = function() {
+    //     var vm = this;
+    //     var url = `https://course-ec-api.hexschool.io/api/${data.uuid}/admin/ec/product`;
+    //     var newData = this.data.newdata;
+    //     axios.post(url,newdata).then( (res) =>{
+    //         console.log(res);
+    //         getData();
+    //     })
+    //     console.log('新增成功');
+    // }
+    var render = function() {
+        var app = document.getElementById('app');
+        var products = this.data.products;
+        var str = '';
+        products.forEach(function(item) {
+        str += `
+        <div class="card d-flex">
+                <img src="${ item.imageUrl }" alt="產品照片" class="imgSort card-img-top border h500 w50 p-15">
+                <div class="border sort">${item.category}</div>
+                <div class="card-body w50">
+                    <div class = "h150 m0 d-flex border titleDiv">
+                        <h5 class="card-title title  ">${item.title}</h5>
+                        <p>原價 ${item.origin_price} 元</p>
+                        <p>特價 ${item.price} 元</p>
+                    </div>
+                    <p class="card-text detail border h350 m0 ">${ item.content }</p>
+                </div>
+            </div>`;
+        });
+        app.innerHTML = str;
+    }
+
+
+    getData();
+</script>
